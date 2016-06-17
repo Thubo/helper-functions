@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------------#
 # full_path:
 # Whenever this function is called (even during source) it returns the full path of the current caller
-function full_path()
+full_path()
 {
   # This figures out where the file is stored and saves it into $SCRIPT_PATH
   # This allowes to run the source script from anywhere
