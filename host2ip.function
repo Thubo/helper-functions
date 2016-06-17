@@ -1,0 +1,11 @@
+#-----------------------------------------------------------------------------#
+# host2ip & ip2host: convert ip to hostname and vice versa
+function host2ip()
+{
+  host $1 | awk '{print $NF}' | sed 's/\.$//g'
+}
+
+function ip2host()
+{
+  host2ip $1
+}

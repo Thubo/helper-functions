@@ -1,0 +1,65 @@
+#-----------------------------------------------------------------------------#
+# dist-upgrade: update your os
+function dist-upgrade()
+{
+  if [[ -f /var/lib/apt/periodic/update-success-stamp ]]; then
+    minutes_since_last_update=$((($(date +%s)-$(stat -c %Y /var/lib/apt/periodic/update-success-stamp))/60))
+  else
+    minutes_since_last_update=61
+  fi
+
+  if [[ $minutes_since_last_update -gt 60 ]]; then
+    echo -n "Getting package information..."
+    sudo apt-get -qqq update
+    echo "Done"
+  else
+    echo "Assuming package information is up-to-date!"
+  fi
+
+  sudo apt-get -y dist-upgrade
+  sudo apt-get -y autoremove
+}
+
+# Prints apt history
+# Usage:
+#   apt-history install
+#   apt-history upgrade
+#   apt-history remove
+#   apt-history rollback
+#   apt-history list
+# Based On: http://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
+function apt-history () {
+  case "$1" in
+    install)
+      zgrep --no-filename 'install ' $(ls -rt /var/log/dpkg*)
+      ;;
+    upgrade|remove)
+      zgrep --no-filename $1 $(ls -rt /var/log/dpkg*)
+      ;;
+    rollback)
+      zgrep --no-filename upgrade $(ls -rt /var/log/dpkg*) | \
+        grep "$2" -A10000000 | \
+        grep "$3" -B10000000 | \
+        awk '{print $4"="$5}'
+      ;;
+    list)
+      zcat $(ls -rt /var/log/dpkg*)
+      ;;
+    *)
+      echo "Parameters:"
+      echo " install - Lists all packages that have been installed."
+      echo " upgrade - Lists all packages that have been upgraded."
+      echo " remove - Lists all packages that have been removed."
+      echo " rollback - Lists rollback information."
+      echo " list - Lists all contains of dpkg logs."
+      ;;
+  esac
+}
+
+# List packages by size
+function apt-list-packages {
+    dpkg-query -W --showformat='${Installed-Size} ${Package} ${Status}\n' | \
+    grep -v deinstall | \
+    sort -n | \
+    awk '{printf("%.2f MiB \t %s\n"), $1/1024, $2}'
+}

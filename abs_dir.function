@@ -1,0 +1,16 @@
+#-----------------------------------------------------------------------------#
+# abs_dir: Get the absolute dir path (resolving symlinks) of the given argument
+function abs_dir()
+{
+  local cwd="$(pwd)"
+  local path="$1"
+
+  while [ -n "$path" ]; do
+    cd "${path%/*}"
+    local name="${path##*/}"
+    path="$(resolve_link "$name" || true)"
+  done
+
+  pwd
+  cd "$cwd"
+}

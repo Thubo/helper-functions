@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Write ~/.gitignore.d file for the given repo
+
+function vcsh_write_gitignore()
+{
+  if [[ $PWD != $HOME ]]; then
+    echo "Please run this command from your home folder"
+    exit 1
+  fi
+
+  if vcsh list | grep -q ${1} ; then
+    echo "Writing ~/.gitignore.d file for ${1}"
+    vcsh write-gitignore ${1}
+    vcsh ${1} add -f $HOME/.gitignore.d/${1}
+    vcsh write-gitignore ${1}
+    vcsh ${1} add .gitignore.d/${1}
+  else
+    echo "${1} is not in the list of vcsh controlled repos"
+    exit 1
+  fi
+}

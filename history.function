@@ -1,0 +1,17 @@
+#-----------------------------------------------------------------------------#
+# h: Search in your history
+function h()
+{
+  LANG=POSIX
+  if [ -z "$1" ]
+  then
+    history
+  else
+    # hist=$(cat $HISTFILE | grep -E -v '^h$|^h |^history')
+    hist=$(history | grep -E -v '[0-9]+  h$|[0-9]+  h |[0-9]+  history')
+    for string in "$@"; do
+      hist=$(echo "$hist" | grep -i $string)
+    done
+    echo "$hist"
+  fi
+}

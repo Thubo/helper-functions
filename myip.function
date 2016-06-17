@@ -1,0 +1,6 @@
+#-----------------------------------------------------------------------------#
+# myip: return my own ips
+function myip()
+{
+  ip addr | grep "inet " | grep -v 127 | cut -d / -f1 | awk '{print $2}'
+}

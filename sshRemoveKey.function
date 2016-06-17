@@ -1,0 +1,10 @@
+#-----------------------------------------------------------------------------#
+# ssh-remove-key(): Remove ssh host key from known hosts
+function ssh-remove-key()
+{
+  host_or_ip=$(host $1 | awk '{print $NF}' | sed 's/\.$//g')
+
+  for i in $1 $host_or_ip; do
+    ssh-keygen -R $i
+  done
+}

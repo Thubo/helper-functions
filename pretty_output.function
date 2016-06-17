@@ -1,0 +1,13 @@
+#-----------------------------------------------------------------------------#
+# pretty_json: Make JSON output pretty
+function pretty_json()
+{
+  python -m json.tool
+}
+
+#-----------------------------------------------------------------------------#
+# pretty_xml: Make JSON output pretty
+function pretty_xml()
+{
+  xmllint --format -
+}
