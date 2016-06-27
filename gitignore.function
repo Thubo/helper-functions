@@ -1,0 +1,21 @@
+#-----------------------------------------------------------------------------#
+# gitignore: Generate gitignore files from gitignore.io
+function gitignore()
+{
+  local query
+
+  LANG=POSIX
+
+  if [ -z "$1" ]
+  then
+     wget -q -O- https://www.gitignore.io/api/list | tr "," "\n"
+  else
+    for option in "$@"; do
+      query="${option},${query}"
+    done
+    # $ x="lkj"
+    # $ echo "${x%?}"
+    # > lk
+    wget -q -O- https://www.gitignore.io/api/${query%?}
+  fi
+}
