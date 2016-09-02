@@ -1,4 +1,42 @@
+#!/bin/bash
+# Start a bash for a new container with the given name
 function docker_bash()
 {
-    docker run -it --rm -P $1 /bin/bash
-  }
+  docker run -it --rm -P $1 /bin/bash
+}
+
+# Start a bash a running container
+function docker_login()
+{
+  if docker inspect --format="{{ .State.Running }}" $1 > /dev/null 2>&1 ; then
+    docker exec -it $1 /bin/bash
+  fi
+}
+
+function docker_kill_all()
+{
+  docker kill $(docker ps -q)
+}
+
+# Delete all stopped containers and untagged images.
+function docker_clean()
+{
+  docker_cleanc
+  docker_cleani
+  docker_cleanv
+}
+# Delete all stopped containers.
+function docker_cleanc()
+{
+  printf "\n>>> Deleting exited containers\n\n" && docker rm $(docker ps -a -q -f "status=exited")
+}
+# Delete all untagged images.
+function docker_cleani()
+{
+  printf "\n>>> Deleting dangling images\n\n" && docker rmi $(docker images -q -f dangling=true)
+}
+# Delete all dangling volumes.
+function docker_cleanv()
+{
+  printf "\n>>> Deleting dangling volumes\n\n" && docker volume rm $(docker volume ls -qf dangling=true)
+}
