@@ -9,7 +9,11 @@ function docker_bash()
 function docker_login()
 {
   if docker inspect --format="{{ .State.Running }}" $1 > /dev/null 2>&1 ; then
-    docker exec -it $1 /bin/bash
+    if [[ -z $2 ]]; then
+      docker exec -it $1 /bin/bash
+    else
+      docker exec -it $1 $2
+    fi
   fi
 }
 
