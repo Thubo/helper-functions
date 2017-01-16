@@ -1,0 +1,14 @@
+#-----------------------------------------------------------------------------#
+# mkd: Create a new directory and enter it
+function search()
+{
+  local BINARY="grep"
+  local ARGS="-nriI"
+
+  if type ag >> /dev/null 2>&1; then
+    BINARY="ag"
+    ARGS="-i"
+  fi
+
+  $BINARY $ARGS "$@"
+}

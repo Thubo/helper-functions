@@ -1,0 +1,4 @@
+function daily_mac_update()
+{
+  brew update; brew upgrade; mr -q -m -j5 up; vim -c 'PlugUpgrade' -c 'PlugUpdate' -c 'qa'
+}

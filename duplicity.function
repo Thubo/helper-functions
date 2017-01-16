@@ -1,17 +1,21 @@
 function dup()
 {
 
-echo "################################################################################"
-
-duplicity --full-if-older-than 1M --exclude-globbing $HOME/.duplicity $1 $2
-
-echo "################################################################################"
-
-duplicity remove-all-but-n-full 6 $2
+# echo "################################################################################"
+#
+# duplicity cleanup --force $2
 
 echo "################################################################################"
 
-duplicity remove-all-inc-of-but-n-full 1  $2
+duplicity --allow-source-mismatch --verbosity info --full-if-older-than 1M --exclude-filelist $HOME/.duplicity $1 $2
+
+echo "################################################################################"
+
+duplicity remove-all-but-n-full --force 6 $2
+
+echo "################################################################################"
+
+duplicity remove-all-inc-of-but-n-full --force 1  $2
 
 echo "################################################################################"
 

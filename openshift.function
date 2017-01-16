@@ -1,0 +1,8 @@
+function oc_about()
+{
+oc version
+if oc whoami ; then
+  oc whoami -c
+  oc whoami -t
+fi
+}
