@@ -17,30 +17,19 @@ function docker_login()
   fi
 }
 
+# Kill all docker containers
 function docker_kill_all()
 {
   docker kill $(docker ps -q)
 }
 
-# Delete all stopped containers and untagged images.
-function docker_clean()
+# Set the current namespace
+function k8_set_namespace()
 {
-  docker_cleanc
-  docker_cleani
-  docker_cleanv
-}
-# Delete all stopped containers.
-function docker_cleanc()
-{
-  printf "\n>>> Deleting exited containers\n\n" && docker rm $(docker ps -a -q -f "status=exited")
-}
-# Delete all untagged images.
-function docker_cleani()
-{
-  printf "\n>>> Deleting dangling images\n\n" && docker rmi $(docker images -q -f dangling=true)
-}
-# Delete all dangling volumes.
-function docker_cleanv()
-{
-  printf "\n>>> Deleting dangling volumes\n\n" && docker volume rm $(docker volume ls -qf dangling=true)
+  if [[ -z ${1} ]]; then
+    kubectl config get-contexts
+  else
+    kubectl config set-context $(kubectl config current-context) --namespace=${1}
+    echo "Set namespace to $(kubectl config view | grep namespace: | tail -n 1 | awk '{print $NF}')."
+  fi
 }
