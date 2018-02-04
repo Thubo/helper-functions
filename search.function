@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------#
-# mkd: Create a new directory and enter it
+# search: Use grep or ag to quickly search in files
 function search()
 {
   local BINARY="grep"

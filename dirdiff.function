@@ -1,0 +1,8 @@
+#-----------------------------------------------------------------------------#
+# dirdiff: Use vim DirDiff plugin to diff multiple directories
+function dirdiff()
+{
+  args=$@
+  vim -f "+execute \"DirDiff $args\""
+}
+
