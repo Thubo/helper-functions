@@ -31,7 +31,7 @@ function fze()
 }
 
 # fd - cd to selected directory
-function fd()
+function fzd()
 {
   local dir
   dir=$(find ${1:-.} -path '*/\.*' -prune \
