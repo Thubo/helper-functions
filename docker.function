@@ -1,4 +1,8 @@
 #!/bin/bash
+if grep -qE "(Microsoft|WSL)" /proc/version &> /dev/null ; then
+  alias docker="docker -H=localhost:2375"
+fi
+
 # Start a bash for a new container with the given name
 function docker_bash()
 {
